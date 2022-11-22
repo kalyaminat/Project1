@@ -7,11 +7,11 @@ from tqdm import tqdm
 
 logger.basicConfig(level=logger.INFO)
 
-VK_ACCESS_TOKEN = 'vk1.a.KuvVyw2DMHuswyc-vgaAPQi-6SNjpRQDIjBWOcVyCUTa4iACIkuqO1DjDWC76lp6ra-2GegCU2P4H-afSgOXHfSTiLvyrojcHniHkME1nAw1G1ISogdNvkA55wvI6sm-7Cm9R--4t2u00I1SzMRMAdi_ETVBPBx7RVWD667kXBebTF0BE_JXym8uSI2Y2BNZ'
+VK_ACCESS_TOKEN = ...
 VK_ID = '590836872'
 VK_URL = 'https://api.vk.com/method/photos.get'
 
-YA_POLYGON_TOKEN = 'y0_AgAAAAAEEYzmAADLWwAAAADTk_9IBTMsfwxPREWhGeTR49rGzgeyV-s'
+YA_POLYGON_TOKEN = ...
 YA_URL = 'https://cloud-api.yandex.net/v1/disk/resources/upload'
 YA_FOLDER_NAME = 'test_folder'
 
@@ -29,14 +29,15 @@ class PhotosTransport:
         final_list = []
 
         # Выполняем поиск максимального количества лайков
-
         likes_list = []
         for el in photo_list:
             likes_list.append(el.get('likes_count'))
         r = max(likes_list)
+
         # Итерируем в диапазоне количества лайков
         for i in range(r + 1):
             sup_list = []
+
             # Каждый раз итерируем по списку фото и находим фото с количеством лайков, равным номеру итерации
             for el in photo_list:
                 if i == int(el.get('likes_count')):
@@ -58,6 +59,7 @@ class PhotosTransport:
 
     def get_vk_photos(self) -> dict:
         """Возвращает полный список ФОТО от VK API"""
+
         params = dict(access_token={self.access_token},
                       user_id={self.client_id},
                       album_id='wall',
@@ -86,6 +88,7 @@ class PhotosTransport:
 
     def ya_create_folder(self) -> bool:
         """Создает папку на яндекс диске и возвращает Екгу если все хорошо иначе возвращает описание ошибки"""
+
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -121,6 +124,7 @@ class PhotosTransport:
 
     def ya_loader(self, photos_list: list, photos_quantity: int = 5) -> list:
         """Загружает на яндекс диск все фото через их URL"""
+
         loaded_list = []
         for el in tqdm(photos_list):
             headers, params = self.file_load_params(ya_token=YA_POLYGON_TOKEN,
@@ -137,6 +141,7 @@ class PhotosTransport:
 
     def main(self):
         """Производит все необходимые процедуры"""
+
         p_list = self.get_vk_photos()
         self.get_photo_list(response_dict=p_list)
 
