@@ -3,6 +3,7 @@ import requests
 
 from datetime import datetime
 from json import dump as jdump
+from sys import exit as exit_runtime
 from tqdm import tqdm
 
 logger.basicConfig(level=logger.INFO)
@@ -66,8 +67,14 @@ class PhotosTransport:
                       v='5.131', extended=1)
         response = requests.get(url=VK_URL, params=params)
         response_dict = response.json()
-        logger.info(msg=f"Список фото в контакте: {response_dict}")
-        return response_dict
+        if response_dict.get("error"):
+            logger.warning(f"Во время обращения к VK API возникла ошибка: "
+                           f" {response_dict.get('error').get('error_msg')}")
+            # raise RuntimeError
+            exit_runtime(400)
+        else:
+            return response_dict
+
 
     def get_photo_list(self, response_dict: dict) -> None:
         """Переделывает полный список фото от ВК в нужный нам с сортировкой"""
