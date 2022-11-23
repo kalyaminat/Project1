@@ -69,7 +69,7 @@ class PhotosTransport:
         response_dict = response.json()
         if response_dict.get("error"):
             logger.warning(f"Во время обращения к VK API возникла ошибка: "
-                           f" {response_dict.get('error').get('error_msg')}")
+                           f"{response_dict.get('error').get('error_msg')}")
             # raise RuntimeError
             exit_runtime(400)
         else:
